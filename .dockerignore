@@ -1,0 +1,13 @@
+.git
+.bundle
+.idea
+.swp
+tmp
+log
+yarn-error.log
+node_modules
+vendor
+docs
+coverage
+.yarnrc
+vendor/bundle

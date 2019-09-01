@@ -1,0 +1,259 @@
+version: '3.7'
+
+services:
+  app: &app
+    build:
+      context: .
+      dockerfile: ./.dockerdev/Dockerfile
+      args:
+        RUBY_VERSION: '2.3.7'
+        PG_MAJOR: '11'
+        NODE_MAJOR: '11'
+        YARN_VERSION: '1.13.0'
+        BUNDLER_VERSION: '2.0.1'
+    image: martians-library-dev:1.0.0
+    tmpfs:
+      - /tmp
+
+  backend: &backend
+    <<: *app
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app:cached
+      - rails_cache:/app/tmp/cache
+      - bundle:/bundle
+      - node_modules:/app/node_modules
+      - packs:/app/public/packs
+      - .dockerdev/.psqlrc:/deployer/.psqlrc:ro
+    environment:
+      - NODE_ENV=development
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - REDIS_URL=redis://redis:6379/
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432
+      - PG_HOST=postgres
+      - PG_DATABASE=eduson-db
+      - PG_USERNAME=eduson_db_user
+      - PG_PORT=5432
+      - PG_STATEMENT_TIMEOUT=10000
+      - BOOTSNAP_CACHE_DIR=/bundle/bootsnap
+      - WEBPACKER_DEV_SERVER_HOST=webpacker
+      - WEB_CONCURRENCY=1
+      - HISTFILE=/app/log/.bash_history
+      - PSQL_HISTFILE=/app/log/.psql_history
+      - EDITOR=vi
+      ### application specific environments   #########
+      - SECRET_KEY_BASE=Zacac3Aejoobeet7huoKaiGhu5Mai7ai
+      - BASE_HOST=lvh.me:1443
+      - EDEMY_HOST=edemy.lvh.me:1443
+      - DEFAULT_URL_HOST=lvh.me
+      - DEFAULT_URL_PORT=1443
+      - DEFAULT_URL_SCHEME=https
+      - ASSET_HOST=lvh.me:1443
+      - ASSET_SCHEME=https
+      - VIDEO_HOST=video.eduson.tv
+      - AUDITION_URL=rtmp://lvh.me/audition
+      - ADMIN_EMAIL=admin@localhost
+      - SUPPORT_EMAIL=support@localhost
+      - WEB_CONCURRENCY=2
+      - RAILS_MIN_THREADS=1
+      - RAILS_MAX_THREADS=1
+      - DB_POOL=5
+      # Sidekiq
+      - SIDEKIQ_REDIS_URL=redis://redis:6379/12
+      - SIDEKIQ_QUEUES=high:3,default:2,scorm:2,heavy:2,low:1,quiet:1
+      #- SIDEKIQ_PID=./tmp/sidekiq.pid
+      #- SIDEKIQ_INLINE=1
+      # Dependencies
+      #- WKHTMLTOPDF_PATH=/usr/local/bin/wkhtmltopdf
+      #- WKHTMLTOIMAGE_PATH=/usr/local/bin/wkhtmltoimage
+      # Solr
+      - SOLR_HOST=solr
+      - SOLR_INDEX=eduson_production
+      # Assets
+      - AWS_ACCESS_KEY_ID=''
+      - AWS_SECRET_ACCESS_KEY=''
+      - AWS_REGION=eu-central-1
+      - AWS_BUCKET=eduson-dev
+      - AWS_VIDEO_BUCKET=eduson-dev-video
+      - AWS_CF_DOMAIN_NAME=dk0fpn295wikr.cloudfront.net
+      # CDN77
+      - CDN77_ID=''
+      - CDN77_LOGIN=''
+      - CDN77_PASSWD=''
+      # ReCaptcha
+      #- RECAPTCHA_SITE_KEY=6LeixIsUAAAAADyZ_klwP0-19EVADDXYzmhp2EZI
+      #- RECAPTCHA_SECRET_KEY=6LeixIsUAAAAAPc_dGpXtONO-P_RpCk_8hCcVfTi
+      # Fog
+      - FOG_PROVIDER=AWS
+      - FOG_DIRECTORY=''
+      # Payments
+      - PAYMENT_GATEWAY=dummy
+      - PAYMENT_GATEWAY_MODE=test
+      - STRIPE_LOGIN=
+      - STRIPE_PUBLISHABLE_KEY=
+      # CloudPayments
+      - CP_ID=''
+      - CP_SECRET=''
+      # PostMark Email Gateway
+      - POSTMARK_API_KEY=''
+      - POSTMARK_ACADEMY_API_KEY=''
+      # MailChimp
+      - MAILCHIMP_LIST_NAME="Eduson Newsletter"
+      - MAILCHIMP_API_KEY=
+      - MAILCHIMP_LIST_NAME_EDEMY="Eduson Academy"
+      - MAILCHIMP_API_KEY_EDEMY=
+      # SMS Gateway
+      - SMS_RU_API_ID=''
+      # NewRelic
+      - NEW_RELIC_LICENSE_KEY=''
+      - NEW_RELIC_APP_NAME=''
+      # Sentry
+      - SENTRY_DSN=''
+      - SENTRY_DSN_PUBLIC=''
+      # Asterisk
+      - ASTER_HOST=127.0.0.1
+      - ASTER_PORT=5038
+      - ASTER_LOGIN=admin
+      - ASTER_PASSWORD=mysecret
+      - ASTER_TWILIO_CALLER='<Eduson.tv> 14153235595'
+      - ASTER_API_BASE=http://127.0.0.1:8090
+      - ASTER_API_SECRET=s3cr3t
+      - ASTER_SSH_USER=root
+      - ASTER_SSH_PORT=2222
+      - ASTER_SSH_KEY=asterisk/server/asterisk.pk
+      - ASTER_ANSWERS_PATH=/tmp/ended_answers/
+      - ASTER_CALLS_PATH=/tmp/ended_calls/
+      - ASTER_CALLBACK_HOST=docker.for.mac.localhost
+      - ASTER_CALLBACK_PORT=1443
+      - ASTER_SIMULATIONS_PATH=/var/lib/asterisk/sounds/simulations
+      - ASTER_RECORDS_PATH=/var/lib/asterisk/sounds/outboundmsgs
+      # HeadHunter
+      - HH_HOST=academy.hh.local
+      - HH_SCHEME=https
+      - HH_RU_CLIENT_ID=''
+      - HH_RU_SECRET=''
+      # Intercom
+      - INTERCOM_APP_ID=''
+      - INTERCOM_API_KEY=''
+      # SAP SaleForce API
+      - SF_ROOT=https://angdp20115.scdemo.successfactors.eu
+      - SF_SECRET=''
+      - SF_CLIENT=''
+      - SF_USER=''
+      # Misc
+      - EDUSON_PROMO_SECRET=''
+      # Slack
+      - SLACK_RND_HOOK=https://hooks.slack.com/services/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
+      - SLACK_NOTIFICATION_HOOK=https://hooks.slack.com/services/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
+      - TELEGRAM_TOKEN=697182564:AAFmxluFksHfr690bf8SXYfEqEAXME7crKY
+      - TELEGRAM_CHAT=-235625952
+      # Trello
+      - TRELLO_KEY=
+      - TRELLO_TOKEN=
+      - TRELLO_BOARD=
+      - TRELLO_MANAGER=
+      # AmoCRM
+      - AMO_DOMAIN=
+      - AMO_LOGIN=
+      - AMO_TOKEN=
+      - AMO_DOMAIN_EDEMY=
+      - AMO_LOGIN_EDEMY=
+      - AMO_TOKEN_EDEMY=
+      #Dev
+      #- DEBUG=1
+      #- DEBUG_EMAIL=1
+      #- API_LOGGER=1
+      - LOG_LEVEL=warn
+      - LOG_TO_STDOUT=1
+      #- LOG_TO_STDOUT_TIME=1
+      #- SIMPLECOV=1
+      #- MAIL_CATCHER=1
+      #- RACK_PROFILER=1
+      #- RACK_TIMEOUT=1
+      #- RACK_TIMEOUT_SERVICE_TIMEOUT=60
+      #- RACK_TIMEOUT_WAIT_TIMEOUT=60
+      - RACK_MULTIPART_PART_LIMIT=0
+      - RACK_MULTIPART_LIMIT=0
+      - ASSET_SYNC_GZIP_COMPRESSION=true
+      - SSL_KEY_PATH=config/server/lvh.me.key
+      - SSL_CRT_PATH=config/server/lvh.me.crt
+
+    depends_on:
+      - postgres
+      - redis
+ #     - solr
+
+  # runner:
+  #   <<: *backend
+  #   command: /bin/bash
+  #   ports:
+  #     - '3000:3000'
+  #     - '3002:3002'
+
+  rails:
+    <<: *backend
+    #command: bundle exec rails server -b 0.0.0.0
+    command: foreman start
+    ports:
+      - '3000:3000'
+
+  # sidekiq:
+  #   <<: *backend
+  #   command: bundle exec sidekiq -C config/sidekiq.yml
+
+  postgres:
+    image: postgres:11.1
+    volumes:
+      - .psqlrc:/root/.psqlrc:ro
+      - postgres:/var/lib/postgresql/data
+      - ./log:/root/log:cached
+    environment:
+      - PSQL_HISTFILE=/root/log/.psql_history
+      - POSTGRES_USER=eduson_db_user
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=eduson-db  
+    ports:
+      - 5432
+
+  redis:
+    image: redis:3.2-alpine
+    volumes:
+      - redis:/data
+    ports:
+      - 6379
+
+  # solr:
+  #   image: solr
+  #   ports:
+  #    - "8983:8983"
+  #   volumes:
+  #     - solr_data:/opt/solr/server/solr/mycores
+  #   entrypoint:
+  #     - docker-entrypoint.sh
+  #     - solr-precreate
+  #     - mycore
+
+  # webpacker:
+  #   <<: *app
+  #   command: ./bin/webpack-dev-server
+  #   ports:
+  #     - '3035:3035'
+  #   volumes:
+  #     - .:/app:cached
+  #     - bundle:/bundle
+  #     - node_modules:/app/node_modules
+  #     - packs:/app/public/packs
+  #   environment:
+  #     - NODE_ENV=${NODE_ENV:-development}
+  #     - RAILS_ENV=${RAILS_ENV:-development}
+  #     - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+
+volumes:
+  postgres:
+  redis:
+  bundle:
+  node_modules:
+  rails_cache:
+  packs:
+  solr_data:
