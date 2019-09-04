@@ -13,8 +13,9 @@ RSpec.describe ApplicationController, type: :controller do
     expect(response.status).to eq 401
   end
 
-  it 'auth_ping returns text "pong" if not loggedin' do
+  it 'auth_ping returns text "pong" if loggedin' do
     user = create(:user)
+    #user.skip_confirmation!
     sign_in(user)
     get :auth_ping
     expect(response.status).to eq 200

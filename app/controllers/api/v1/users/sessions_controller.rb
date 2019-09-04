@@ -31,6 +31,7 @@ module Api
         private
 
         def respond_with(resource, _opts = {})
+          response.set_header('Access-Control-Expose-Headers', 'Authorization')
           render json: resource
         end
 

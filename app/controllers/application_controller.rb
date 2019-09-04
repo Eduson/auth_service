@@ -11,6 +11,7 @@ class ApplicationController < ActionController::API
   end
 
   def render_resource(resource)
+    response.set_header('Access-Control-Expose-Headers', 'Authorization')
     if resource.errors.empty?
       render json: resource, status: 201
     else

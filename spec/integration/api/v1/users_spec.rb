@@ -2,7 +2,7 @@ require 'swagger_helper'
 
 describe 'Users API', type: :request, swagger_doc: 'v1/swagger.json' do
   path '/users/sign_up' do
-    post 'Creates a user' do
+    post 'Creates a user (SignUp)' do
 
       tags 'Authentication'
       consumes 'application/json'
