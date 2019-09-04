@@ -52,12 +52,11 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'json-schema'
+gem 'json-schema', '~> 2.8.1'
 gem 'devise'
 gem 'devise-jwt'
 gem 'versionist'
 gem 'pg'
-gem 'rack-cors'
 #gem 'rack-attack'  # https://github.com/kickstarter/rack-attack
 
 # json object presenters (active_model_serializers instead)

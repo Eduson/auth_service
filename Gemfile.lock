@@ -297,7 +297,7 @@ DEPENDENCIES
   fabrication
   factory_bot_rails
   faker
-  json-schema
+  json-schema (~> 2.8.1)
   json_matchers
   letter_opener
   listen (>= 3.0.5, < 3.2)
