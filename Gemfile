@@ -35,7 +35,6 @@ group :development, :test do
   # gem 'grape-swagger-rails'
   #gem 'dredd_hooks'
   gem 'rswag', git: 'https://github.com/greendog/rswag.git'  # https://medium.com/wolox-driving-innovation/lets-forget-painful-api-documentation-f5d0f5d0d06d
-  gem 'json-schema'
 
   # rubocop
   gem 'rubocop', require: false
@@ -53,6 +52,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+gem 'json-schema'
 gem 'devise'
 gem 'devise-jwt'
 gem 'versionist'
