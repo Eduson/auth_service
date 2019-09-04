@@ -1,0 +1,11 @@
+{
+  "name": "auth_service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Eduson/auth_service.git",
+  "author": "Eduson Team <team@eduson.tv>",
+  "license": "MIT",
+  "dependencies": {
+    "swagger-ui-dist": "^3.23.8"
+  }
+}

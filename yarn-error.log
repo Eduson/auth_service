@@ -1,0 +1,33 @@
+Arguments: 
+  /home/greendog/.asdf/installs/nodejs/8.9.0/bin/node /usr/local/bin/yarn add swagger-ui-dist
+
+PATH: 
+  /home/greendog/.kubectx:/home/greendog/.asdf/shims:/home/greendog/.asdf/bin:/home/greendog/dev/eduson/auth_service/node_modules/.bin:/home/greendog/.local/bin:/home/greendog/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/greendog/.fzf/bin
+
+Yarn version: 
+  1.10.1
+
+Node version: 
+  8.9.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: EACCES: permission denied, mkdir '/home/greendog/dev/eduson/auth_service/node_modules/swagger-ui-dist'
+
+npm manifest: 
+  {
+    "name": "auth_service",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "git@github.com:Eduson/auth_service.git",
+    "author": "Eduson Team <team@eduson.tv>",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

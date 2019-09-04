@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
+#  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs'
+
   namespace :api, as: nil do
     namespace :v1, as: nil do
       devise_for :users,
