@@ -94,8 +94,13 @@ services:
 
   rails:
     <<: *backend
-    #command: bundle exec rails server -b 0.0.0.0
-    command: bundle install && bundle exec rake db:migrate && bundle exec rails s -b 0.0.0.0
+    command:
+      - /bin/sh
+      - -c
+      - |
+          bundle install
+          bundle exec rake db:migrate
+          bundle exec rails s -b 0.0.0.0
     ports:
       - '3000:3000'
 
