@@ -19,7 +19,7 @@ module Api
         def create
           build_resource(sign_up_params)
 
-          resource.skip_confirmation_notification!
+          #resource.skip_confirmation_notification!
           resource.confirmed_at = Time.now
           resource.save
           render_resource(resource)

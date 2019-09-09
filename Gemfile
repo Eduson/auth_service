@@ -29,11 +29,17 @@ group :development, :test do
   gem "json_matchers"
   #gem 'letter_opener_web'
   gem "letter_opener"
+  gem "pry-byebug"
+  gem "pry-rails"
+  gem "pry-rescue"
+  gem "pry-stack_explorer"
+  gem "pry-state"
+  gem "timecop"
 
   #gem 'swagger-blocks'
   # gem 'swagger-docs'
   # gem 'grape-swagger-rails'
-  #gem 'dredd_hooks'
+  gem 'dredd_hooks'
   gem 'rswag', git: 'https://github.com/greendog/rswag.git'  # https://medium.com/wolox-driving-innovation/lets-forget-painful-api-documentation-f5d0f5d0d06d
 
   # rubocop

@@ -9,9 +9,9 @@ describe 'Users API', type: :request, swagger_doc: 'v1/swagger.json' do
       parameter name: :user, in: :body, schema: {
           type: :object,
           properties: {
-              email: { type: :string },
-              password: { type: :string },
-              password_confirmation: { type: :string }
+              user: [ email: { type: :string },
+                      password: { type: :string },
+                      password_confirmation: { type: :string }]
           },
           required: %w[email password password_confirmation]
       }
