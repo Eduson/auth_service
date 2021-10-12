@@ -9,7 +9,7 @@ gem 'rails', '~> 6.0.0'
 # gem 'sprockets'
 gem 'sqlite3', '~> 1.4'
 # Use Puma as the app server
-gem 'puma', '~> 3.12.1'
+gem 'puma', '~> 4.3.9'
 gem 'bootsnap', '>= 1.4.2', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
